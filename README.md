@@ -105,6 +105,8 @@ figures/
   bonus_shrink.png               Why variance-aware exploration bonuses shrink for consistent arms
   extension_variance_sweep.png   Regret vs reward variance at a fixed gap
 author_data/                     The author's published result CSVs used for verification (MIT licence, see inside)
+docs/
+  video_recording_guide.md       Script and checklist for the code walkthrough video
 ```
 
 ## Notebook contents
@@ -119,6 +121,18 @@ author_data/                     The author's published result CSVs used for ver
 | 6 | Tuning sensitivity and why ETC's average regret is fragile |
 | 7 | Extension: decoupling mean and variance with Beta rewards |
 | 8 | Summary and references |
+
+## Video walkthrough
+
+Our presentation video has two parts:
+
+| Part | Content | Length |
+|---|---|---|
+| 1 | The paper: objective, algorithms, setup, results, limitations and future work (all four members) | about 2 min |
+| 2 | Code walkthrough of this repository and `Code.ipynb`, presented by Bhatt Dhruv Anil | about 4.5 min |
+
+The script, on-screen cues and recording checklist for Part 2 are in
+[docs/video_recording_guide.md](docs/video_recording_guide.md).
 
 ## How to run
 
