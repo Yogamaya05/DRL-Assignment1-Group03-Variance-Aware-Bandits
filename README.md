@@ -5,12 +5,17 @@
 This repository contains our implementation and analysis for the paper
 **"A Framework for Fair Evaluation of Variance-Aware Bandit Algorithms"** (Wolf, 2025, [arXiv:2510.27001](https://arxiv.org/abs/2510.27001)).
 
-| Member | BITS ID |
-|---|---|
-| Suchintak Patnaik | 2025AG05930 |
-| Yogamaya Dash | 2025AG05620 |
-| Dialani Chitra BasantKumar | 2025AG05777 |
-| Bhatt Dhruv Anil | 2025AG05557 |
+## Team and contributions
+
+All four members studied the paper together and divided the sections equally. Each member presents their own part
+in the video, in the order below.
+
+| Member | BITS ID | Slides | Contribution | Related notebook sections |
+|---|---|---|---|---|
+| Yogamaya Dash | 2025AG05620 | 1–8 | Objective and motivation of the paper; the eight algorithms it evaluates | §2, §3 |
+| Suchintak Patnaik | 2025AG05930 | 9–13 | Experimental set-up (10⁶ steps, 100 runs, same seeds, both arm orders); variance of each arm, p(1−p); Scenario A (baseline) | §1, §4, §5 (Scenario A) |
+| Dialani Chitra BasantKumar | 2025AG05777 | 14–15 | Scenarios B and C: UCB-Tuned vs plain UCB and tuned ETC; when variance-awareness matters most | §5 (Scenarios B, C) |
+| Bhatt Dhruv Anil | 2025AG05557 | 16–25 | Overall findings, limitations, critical reflections, future work, conclusion | §6, §7 |
 
 ---
 
@@ -83,13 +88,13 @@ author_data/                     The author's published result CSVs used for ver
 
 ## Notebook contents
 
-| § | Section | Owner |
+| § | Section | Presented by |
 |---|---|---|
 | 1 | Setup: the three scenarios, and why 0/1 rewards tie the variance to the win rate | Suchintak Patnaik |
 | 2 | All eight algorithms, the fair-evaluation simulator, and the author-variant implementations | Yogamaya Dash |
 | 3 | Why variance-awareness helps: the exploration-bonus comparison | Yogamaya Dash |
-| 4 | Fairness controls: arm ordering and common random numbers | Dialani Chitra BasantKumar |
-| 5 | Author's published results, our reproduction, our fair version, risk metrics, UCB-Improved evidence | Dialani Chitra BasantKumar |
+| 4 | Fairness controls: arm ordering and common random numbers | Suchintak Patnaik |
+| 5 | Author's published results, our reproduction, our fair version, risk metrics, UCB-Improved evidence | Suchintak Patnaik (Scenario A), Dialani Chitra BasantKumar (Scenarios B, C) |
 | 6 | Tuning sensitivity and why ETC's average regret is fragile | Bhatt Dhruv Anil |
 | 7 | Extension: decoupling mean and variance with Beta rewards | Bhatt Dhruv Anil |
 | 8 | Summary and references | All |
