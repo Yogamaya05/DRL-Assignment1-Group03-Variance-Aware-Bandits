@@ -12,6 +12,32 @@ This repository contains our implementation and analysis for the paper
 | Dialani Chitra BasantKumar | 2025AG05777 |
 | Bhatt Dhruv Anil | 2025AG05557 |
 
+## Contributions
+
+All four members studied the paper together and divided the sections among themselves.
+
+**Yogamaya Dash (2025AG05620)**
+- Objective and motivation of the paper.
+- The eight algorithms the paper evaluates: ETC, ε-Greedy, UCB, UCB-Tuned, UCB-V, EUCBV, PAC-UCB and UCB-Improved.
+
+**Suchintak Patnaik (2025AG05930)**
+- Experimental setup used for all algorithms: 1 million steps per run, 100 repetitions, the same seeds and both arm orders.
+- Calculated each arm's reward variance from its win rate, p(1 − p), since the paper gives only the win rates.
+- Scenario A (baseline): the tuned ETC algorithm performs best, with a regret of about 10.
+
+**Dialani Chitra BasantKumar (2025AG05777)**
+- Scenario B (gap of 0.005): UCB-Tuned cuts regret from 1,127 to 212, though tuned ETC still edges ahead at 151.
+- Scenario C (higher variance): UCB-Tuned again beats plain UCB, 226 vs 1,173.
+- Showed that variance-awareness matters most when the arms are both hard to distinguish and noisy.
+
+**Bhatt Dhruv Anil (2025AG05557)**
+- Overall findings: UCB-Tuned consistently beats plain UCB when the arms are close and noisy, though a well-tuned ETC can still match it.
+- Limitations:
+  - The study covers only stationary, two-armed bandits with binary rewards.
+  - ETC was given five tuning settings, versus one each for UCB-V and EUCBV.
+  - Fixing the win rates also fixes the variance.
+- Future work: rewards whose variance can be set independently of the mean, such as Gaussian rewards.
+
 ---
 
 ## Purpose
