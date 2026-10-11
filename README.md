@@ -105,8 +105,6 @@ figures/
   bonus_shrink.png               Why variance-aware exploration bonuses shrink for consistent arms
   extension_variance_sweep.png   Regret vs reward variance at a fixed gap
 author_data/                     The author's published result CSVs used for verification (MIT licence, see inside)
-docs/
-  video_recording_guide.md       Script and checklist for the code walkthrough video
 ```
 
 ## Notebook contents
@@ -122,17 +120,113 @@ docs/
 | 7 | Extension: decoupling mean and variance with Beta rewards |
 | 8 | Summary and references |
 
-## Video walkthrough
+## Notebook walkthrough
 
-Our presentation video has two parts:
+This section goes through `Code.ipynb` one section at a time and gives the key result each produces. All numbers are
+taken from the notebook's saved output (paper setting, T = 10⁶).
+
+### Section 1: Setup and configuration
+
+* **Paper setting:** one million pulls per run, 100 runs for each arm order, and a fixed seed (`SEED = 2025`).
+* **Variances:** each arm's reward variance is computed as p(1 − p), because the paper gives only the win rates:
+
+  | Scenario | Win rates | Gap | Variances |
+  |---|---|---|---|
+  | A | 0.80 vs 0.90 | 0.100 | 0.160 vs 0.090 |
+  | B | 0.895 vs 0.900 | 0.005 | 0.094 vs 0.090 |
+  | C | 0.890 vs 0.895 | 0.005 | 0.098 vs 0.094 |
+
+* **Why this matters:** Scenarios B and C differ in variance by only about 4 %. This motivates the extension in Section 7.
+
+### Section 2: Algorithms and the fair-evaluation simulator
+
+* **Algorithms:** all eight are implemented from their original papers.
+  * UCB-Tuned's exploration bonus uses each arm's measured variance, capped at ¼.
+  * UCB-V adds a Bernstein-style bonus.
+* **Constants:** these are taken from the author's configuration file, so our numbers can be compared directly with hers.
+* **Author variants (Section 2.1):** the author's code differs from the textbook versions in three places: ETC,
+  ε-Greedy and UCB-Improved. Each difference is also implemented as an author variant, so the notebook can produce
+  both the published results and the textbook results.
+
+### Section 3: Why variance-awareness helps
+
+* **Setup:** we compare the exploration bonus at t = 10,000, after 1,000 pulls of an arm.
+* **Consistent arm (p = 0.95):** UCB gives a bonus of 0.136, UCB-Tuned 0.041 (about a third) and UCB-V 0.057.
+* **Effect:** a smaller bonus means variance-aware methods stop re-checking a consistent arm sooner.
+
+### Section 4: Fairness controls in action
+
+* **Arm order matters:** ETC with only 10 exploration pulls in Scenario C gives a regret of about 2,900 when the better
+  arm is listed second, and about 2,000 when it is listed first. Averaging both orders gives 2,450. This is why every
+  experiment is run with both arm orders.
+* **Common random numbers:** every algorithm receives the same reward sequence for a given seed, so differences in
+  regret come from the algorithms rather than from luck.
+
+### Section 5: Verification, reproduction and fair comparison
+
+* **Verification (Section 5.0):** the notebook downloads the author's published result files and checks every number on
+  our slides. All 33 match.
+* **Reproduction (Sections 5.2 and 5.3):** with the author's implementation choices, our simulator closely matches the
+  published values:
+
+  | Setting | Ours | Author |
+  |---|---|---|
+  | Scenario A, ETC (m = 100) | 10.33 | 10.10 |
+  | Scenario B, UCB-Tuned | 211.27 | 212.21 |
+  | Scenario B, UCB | 1,133.33 | 1,127.17 |
+  | Scenario C, UCB-Tuned | 217.06 | 226.09 |
+
+  The rank correlation with the author's results across all 16 settings is 1.00, 0.97 and 0.97 for Scenarios A, B and C.
+* **Fair version:** with textbook algorithms and both arm orders, UCB-Tuned has the lowest mean regret in all three
+  scenarios. It is about 5× better than plain UCB in Scenarios B and C.
+* **Risk (Section 5.4):** regret curves over time and per-run regret distributions (VaR) for Scenario C.
+* **UCB-Improved evidence (Section 5.5):**
+  * In the author's own file, 66 of 100 runs end with a regret below 2.8.
+  * That is impossible with a correct schedule: the first phase alone pulls each arm 28 times, at a cost of 0.1 per pull.
+  * So the published value of 32,500 comes from an implementation error.
+
+### Section 6: Tuning sensitivity
+
+* **Best ETC setting:** it moves from m = 100 in Scenario A to m = 10,000 in Scenarios B and C, a 100× change that
+  cannot be chosen without already knowing the gap.
+* **Why ETC's mean is fragile (Section 6.1):** for ETC with m = 10,000 in Scenario B, the rate of committing to the wrong arm is:
+  * about 12 % in theory
+  * 13 % in our runs
+  * about 2 % implied by the paper's value of 150.66
+
+  The paper's "tuned ETC is best" result therefore depends on the author's ETC never locking in an arm.
+
+### Section 7: Extension, decoupling mean and variance
+
+* **Setup:**
+  * The means are fixed at 0.45 vs 0.50, a gap of 0.05.
+  * Rewards are drawn from Beta distributions, which keep rewards in [0, 1].
+  * The variance is varied from 0.002 to 0.25 (Bernoulli).
+* **Results:**
+
+  | Algorithm | Regret at variance 0.002 | Regret at variance 0.25 |
+  |---|---|---|
+  | UCB | 452 | 449 |
+  | UCB-Tuned | 47 | 70 |
+  | UCB-V | 49 | 195 |
+  | PAC-UCB | 44 | 200 |
+  | EUCBV | 89 | 100 |
+
+* **Takeaway:** plain UCB is unaffected, while UCB-V's regret rises about 4× as noise grows. This isolates the variance
+  effect the paper could not test with 0/1 rewards.
+
+### Section 8: Summary and references
+
+This section summarises the findings above and lists the papers used for every algorithm.
+
+## Presentation video
+
+The presentation video has two parts. The link is on the last slide of the presentation.
 
 | Part | Content | Length |
 |---|---|---|
-| 1 | The paper: objective, algorithms, setup, results, limitations and future work (all four members) | about 2 min |
-| 2 | Code walkthrough of this repository and `Code.ipynb`, presented by Bhatt Dhruv Anil | about 4.5 min |
-
-The script, on-screen cues and recording checklist for Part 2 are in
-[docs/video_recording_guide.md](docs/video_recording_guide.md).
+| 1 | The paper: objective, algorithms, setup, results, limitations and future work | about 2 min |
+| 2 | A walkthrough of this repository and `Code.ipynb`, following the Notebook walkthrough above | about 4.5 min |
 
 ## How to run
 
