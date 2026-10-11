@@ -1,0 +1,13 @@
+# Submission files (shared separately, not part of the code repository)
+*.pptx
+*.pdf
+*.mp4
+backup/
+
+# Python / Jupyter
+__pycache__/
+.ipynb_checkpoints/
+*.pyc
+
+# OS
+.DS_Store
